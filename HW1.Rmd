@@ -1,0 +1,65 @@
+---
+title: "Stat 511 HW 1"
+author: "Max Barnes"
+date: "9/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("Sleuth3")
+library("tidyr")
+library("tidyverse")
+library("ggplot2")
+```
+
+## 1-2
+It is difficult to prove sex discrimination mainly due to the difficulty associated with gaining a truly random sample of the population. There are so many factors that effect how people are hired, that even if discrimination does occur, it would be hard to determin so. 
+
+## 1-6
+(A) No, a genuine causal relationship cannot be established from from this study. This is because causal relationships can only be established for randomized relationships, of which this study is not. 
+(B) This study is observational in nature, and could be generalized toward the population of 14-16 year olds, however the inferences made are purely observational. 
+(C) Potential confounding factors about this study are that the Marijuana gropu was not randomly taken from a random population. The group was drawn from a group of people already enrolled in a drug abuse program (not random by any means). Due to the observational nature of the study, any findings are purely speculative and have little to no statistical significance. This study really only applies to the participants in the study.
+
+## 1-11
+It can be said that the difference in treatments likely had an impact on the differences in cold rates, however, the study should be carried out again with a tasteless Vitamin C. The participants who correctly guessed that they were not taking the placebo could have used this knowledge to behave differently than they would have if they hadn't known which of the two pills they were taking.
+
+## 1-12
+This study is important given the lack of random selection for the same reasons that the study involving males with Chinese and European heritage was still important. For males with highblood pressure, it appears that fish oil dramatically reduces diastolic pressure levels, just like for men who were studied to understand the effects of a blood pressure reducing drug. The study provides important information to doctors who have patients with highblood pressure. 
+
+## 1-16
+(A)
+```{r echo=FALSE}
+boxplot(ex0116$PerCapitaGDP, ylab = 'Gross Domestic Product per Capita in $U.S')
+```
+(B) My display generates and empty box plot for "Rank" and "Country" unless I tell it not to, while Display 1.11 in the book does not. Otherwise, they look fairly similar otherwise.
+(C) The bin width is 20,000.
+```{R echo = FALSE}
+hist(ex0116$PerCapitaGDP, xlab = 'GDP', main = 'Histogram of PerCapita', col='lightgreen')
+```
+(D) 
+```{R echo = FALSE}
+hist(ex0116$PerCapitaGDP, xlab = 'GDP', breaks = 30, main = 'Histogram of PerCapita', col='purple')
+```
+
+
+## 1-18
+```{r include =TRUE}
+set.seed(47)
+case <-(case0101)
+number <-rnorm(47)
+df <-data.frame(number)
+data <- cbind(df, case)
+data1 <- data[with(data, order(number)),]
+data1
+first <- data1[1:24, 2:2]
+second <- data1[25:47, 2:2]
+meanfirst <- mean(first)
+meansecond <- mean(second)
+meandifference <- meanfirst-meansecond
+```
+The average of the first 24 scores is **`r meanfirst`**, while the average of the second group of 23 scores is **`r meansecond`**. The difference between the two averages is **`r meandifference`**.
+
+## 1-26
+##1-27
+
