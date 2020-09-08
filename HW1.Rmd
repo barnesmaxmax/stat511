@@ -2,8 +2,12 @@
 title: "Stat 511 HW 1"
 author: "Max Barnes"
 date: "9/3/2020"
-output: html_document
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
 ---
+I'm still working on figuring out some of the intricacies of R, so please bear with me while I perfect my formatting skills using R Markdown.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -61,5 +65,27 @@ meandifference <- meanfirst-meansecond
 The average of the first 24 scores is **`r meanfirst`**, while the average of the second group of 23 scores is **`r meansecond`**. The difference between the two averages is **`r meandifference`**.
 
 ## 1-26
-##1-27
+```{R 1-26, echo = FALSE}
+data26 <- (ex0126)
+party26 <- data26
+pro05 <- data26[1:492, 4:4]
+anti05 <- data26[1:492, 5:5]
+plot(data26$Party, data26$PctPro, xlab = 'Party', ylab = 
+       'PercentPro')
+tapply(data26$PctPro , data26$Party, mean)
+```
 
+From the boxplot and mean data above, it is relatively easy to see where the median lies for each party. For the Democratic party, the the median lies at about 90%, while the median lies at less than 20% for Republicans. The mean for the Republican party is 16.17%, while the mean for the Democratic party is approximately 85.89%. Democrats more often vote positively for environmental policies than Republicans do. Interestingly, the single Independent voter (Bernie Sanders) always voted positively for environmental policies. 
+
+## 1-27
+```{R 1-27, echo = FALSE}
+data27 <- (ex0127)
+party27 <- data27
+pro2005 <- data27[1:112, 4:4]
+anti2005 <- data27[1:112, 5:5]
+plot(data27$Party, data27$PctPro, xlab = 'Party', ylab = 
+       'PctPro')
+tapply(data27$PctPro , data27$Party, mean)
+```
+
+From the boxplot and mean data shown above, it is relatively easy to see where the mean median lie for each party in the Senate. For the Republican party, the median lies below 20% again, while the mean is approximately 18.54% as well, while for the Democrat Party, the median lies at around 90% pro votes on environmental votes, and the mean is 83.64%. 
