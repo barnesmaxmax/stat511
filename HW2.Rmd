@@ -1,0 +1,36 @@
+---
+title: "HW2"
+author: "Max Barnes"
+date: "9/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library("Sleuth3")
+library("tidyr")
+library("tidyverse")
+library("ggplot2")
+```
+
+## 2-3
+False. The Central Limit Theorem tells us that the shape of the sampling distribution will be more nearly normal than the shape of the population distributions because the sampling distribution is centered on the population mean. This doesn't necessarily mean that  the shape of the histogram will be normal.
+
+## 2-6
+$$Y_2 - Y_1 \neq 0$$ 
+Y bar is the sample average, not the actual population average. We use Y bar (a statistic) to guess the parameters and approximate Mu, which is the actual population average. The issue here is that the hypothesis has to be about the actual parameter, not the statistic. The null hypothesis is about the parameter, not the statistic.
+
+## 2-7
+The hypothesis that the difference is zero, is the null hypothesis. In this case, we would reject the null hypothesis with a 95% confidence interval, because the P-value (the measure of uncertainty) is likely small (less than 0.05) because the confidence interval does not include 0 as a head circumference. 
+
+## 2-13
+```{r , echo = FALSE}
+data13 <-(ex0112)
+#fish <- data13[1:7,1:1]
+#regular <- data13[8:14, 1:1]
+Diet <- with(data13, split(BP, Diet))
+fishoil <-as.numeric(unlist(Diet[1]))
+regularoil <- as.numeric(unlist(Diet[2]))
+```
+## 2-18
+
+## 2-22
