@@ -2,7 +2,9 @@
 title: "HW2"
 author: "Max Barnes"
 date: "9/9/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -23,14 +25,165 @@ Y bar is the sample average, not the actual population average. We use Y bar (a 
 The hypothesis that the difference is zero, is the null hypothesis. In this case, we would reject the null hypothesis with a 95% confidence interval, because the P-value (the measure of uncertainty) is likely small (less than 0.05) because the confidence interval does not include 0 as a head circumference. 
 
 ## 2-13
-```{r , echo = FALSE}
+```{r , echo = FALSE, warning = FALSE, message = FALSE}
+#install.packages("ANOVAreplication")
+#install.packages("plotrix")
+library("plotrix")
+library("ANOVAreplication")
 data13 <-(ex0112)
 #fish <- data13[1:7,1:1]
 #regular <- data13[8:14, 1:1]
-Diet <- with(data13, split(BP, Diet))
-fishoil <-as.numeric(unlist(Diet[1]))
-regularoil <- as.numeric(unlist(Diet[2]))
+#Diet <- with(data13, split(BP, Diet))
+#fishoil <-as.numeric(unlist(Diet[1]))
+#regularoil <- as.numeric(unlist(Diet[2]))
+fishoil <- filter(data13, Diet == "FishOil")
+regularoil <- filter(data13, Diet == "RegularOil")
+meanfishoil <-mean(fishoil$BP)
+meanregularoil <- mean(regularoil$BP)
+sdfishoil <- sd(fishoil$BP)
+sdregularoil <- sd(regularoil$BP)
+pooledsd <- pooled.sd(data13)
+se <- pooledsd * sqrt((1/nrow(fishoil)) + (1/nrow(regularoil))) #not sure why the std.error function didn't work here
+degfree <- nrow(fishoil) + nrow(regularoil) - 2
+pctile <- 2.179 #from t table on google
+#me <- 1.959964 * (sdregularoil - sdfishoil)/sqrt(14)
+#lower <- mean(data13$BP) - me
+#upper <- mean(data13$BP) + me
+lower <- -2.179 * se + (meanfishoil-meanregularoil)
+upper <- 2.179 * se + (meanfishoil-meanregularoil)
+t.test(fishoil$BP,regularoil$BP, var.equal = T, alternative = 'greater')
+#talk about houw running the test differntly gives the correct confidence interval
+
 ```
+A.
+The average of the fish oil group was **`r meanfishoil`**  
+The average of the regular oil was **`r meanregularoil`**  
+The standard deviation of the fish oil group was **`r sdfishoil`**  
+The standard deviation fo the regular oil was **`r sdregularoil`**  
+
+B.
+The pooled estimate of the standard deviation was **`r pooledsd`**  
+
+C.
+The SE is **`r se`**  
+
+D.
+The degrees of freedom associated with the standard deviation is **`r degfree`**  
+
+E.
+The 95% confidence interval is **(`r lower`, `r upper`)**  
+
+F-G. The t-statistic and one sided p-value are shown in the t-test shown below. The t-statistic is **3.0621**, and the p-value is **0.004931** 
+```{r echo = F}
+t.test(fishoil$BP,regularoil$BP, var.equal = T, alternative = 'greater')
+```
+
 ## 2-18
+```{r include = FALSE} 
+data18 <- (ex0218)
+first <- filter(data18, Year == "1976")
+second <- filter(data18, Year == "1978")
+```
+
+A.
+```{r echo = F}
+boxplot(first$Depth, second$Depth, main = "Beak Size by Year", xlab = 'Year', ylab = 'Beak Depth (mm)', names = c("1976", "1978"))
+```
+
+B. The one-sided p-value is **1.617e-06**
+```{r echo = F}
+t.test(second$Depth,first$Depth, var.equal = T, alternative = 'greater')
+```
+
+C. The two-sided p-value is **3.233e-06**  
+D. The t-ratio is **4.6871**, and the upper confidence difference is **0.7624495** and the lower confidence difference is **0.3123571**
+```{r echo = F}
+ t.test(second$Depth, first$Depth, var.equal = TRUE, alternative = 'two.sided')
+```
+E. It is possible that many of the finches sampled in 1978 were alive during the 1976 sampling, which would mean that some of the birds are double counted. This breaks the integrity of the two population sample because some of the birds would only make up a single population in this experiment.
+```{r echo = F}
+#t.test(second$Depth,first$Depth, var.equal = T, )
+#xbar <- 10.138202
+#mu0 <- 9.600799
+#sigma <- sd(data18$Depth)
+#n <- 839
+#z <- (xbar-mu0)/(sigma/sqrt(n))
+#alpha <- .05
+#z.half.alpha <- qnorm(1-alpha/2)
+#c(-z.half.alpha, z.half.alpha)
+#pval <- 2 * pnorm(z)
+#pval
+
+# two sided t.test(second$Depth, first$Depth, var.equal = TRUE, alternative = 'two.sided')
+# Estimate = 4.6871 (t-ratio), Upperbound = 0.7624495, Lowerbound = 0.3123571
+# It is possible that finches from the first test were still alive during the second test, which means that there may be some overlap, and that the distinction between populations isn't as distinct as previously thought. 
+```
 
 ## 2-22
+```{r include = F}
+data22 <- (ex0222)
+men <- filter(data22, Gender == "male")
+women <- filter(data22, Gender == "female")
+```
+
+There is a slight difference between males and females in the overall AFQT. The boxplot shows that there is a difference of about 3 between the means of the two sets of data.  
+
+```{r echo = FALSE}
+AFQT <- boxplot(men$AFQT, women$AFQT, main = "AFQT by Gender", xlab = "Gender", ylab = "AFQT Percentile Scores", names = c("Male", "Female"))
+```
+
+The p-value of the two-tailed p-test is 6.17%, which shows suggestive yet inconclusive evidence that there is a difference between the two means.
+
+```{r echo = FALSE}
+t.test(men$AFQT, women$AFQT,var.equal = TRUE, alternative = 'two.sided')
+```  
+
+The arithmetic difference between the means is similar to the overal AFQT, with the male mean sitting at about 20, and the female mean sitting just above 15.
+ 
+```{r echo = FALSE}
+arith<- boxplot(men$Arith, women$Arith, main = "Arith by Gender", xlab = "Gender", ylab = "Arith Percentile Scores", names = c("Male", "Female"))
+``` 
+
+The t-ratio for the Arithmetic data is 7.3064, and the P-value for the two-sided test is very small, at 3.639e-13. This suggests that the null hypothesis would be rejected for this dataset. It seems evident here that gender plays a role in score differences between genders.
+
+```{r echo = FALSE}
+t.test(men$Arith, women$Arith,var.equal = TRUE, alternative = 'two.sided')
+```
+
+The word portion of the testing show similar means with the males scoring 26.54 and females scoring 26.56. The means are very similar.
+
+```{r echo = FALSE}
+word<- boxplot(men$Word, women$Word, main = "Word Scores by Gender" ,xlab = "Gender", ylab = "Word Percentile Scores", names = c("Male", "Female"))
+```
+ 
+The reported t-ratio here is -0.079805, which is very small. Additionally, the P-value is 0.9364 for a 95% confidence interval, which is very large. Due to this large p-value, we would not be able to reject the null hypothesis with the given information. 
+ 
+```{r echo = FALSE}
+t.test(men$Word, women$Word,var.equal = TRUE, alternative = 'two.sided')
+```
+
+Here, there is a difference between males and females. The female mean is slightly higher than that of the males, by about 1 point. 
+
+```{r echo = FALSE}
+parag<- boxplot(men$Parag, women$Parag, main = "Paragraph Scores by Gender", xlab = "Gender", ylab = "Parag Percentile Scores", names = c("Male", "Female"))
+```
+
+The t-ratio is -4.5968. The p-value, which is very small at 4.497e-06 shows that there is convincing evidence that there is a difference between males and females, which would cause us to reject the null hypothesis. 
+
+```{r echo = FALSE}
+t.test(men$Parag, women$Parag,var.equal = TRUE, alternative = 'two.sided')
+```
+
+The last section of data is the math by gender data section. The mean here is higher for the males, again by about 1 point. 
+
+```{r echo = FALSE}
+math<- boxplot(men$Math, women$Math, main = "Math by Gender", xlab = "Gender", ylab = "Math Percentile Scores", names = c("Male", "Female"))
+```
+
+The t-ratio is 3.0464, and the p-value is 0.002339, which is not small. This suggests that there is suggestive but inconclusive evidence that gender plays a role in test scores. 
+
+```{r echo = FALSE}
+t.test(men$Math, women$Math,var.equal = TRUE, alternative = 'two.sided')
+```
+
+There is strong evidence that men outperform women on the overall test. However, women outperform males on the paragraph tests, while males outperform women on the math and arithmetic tests. That being said, the word section of the test seemed to lack significance from either group. These tests measure measurable things. Intangible skills, like creativity, resourcefulness, and imagination are not measure here. It should likely be argued that these skills should be included in an evaluation of overall intelligence. This data does not seem to be conclusive overall because of the ways in which it lacks completeness. 
