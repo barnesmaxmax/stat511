@@ -1,0 +1,63 @@
+---
+title: "HW3"
+author: "Max Barnes"
+date: "9/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library("Sleuth3")
+library("tidyr")
+library("tidyverse")
+library("ggplot2")
+library("ANOVAreplication")
+```
+## 3-3
+It was important that the crew be unaware of whether seeding was conducted or not to maintaint blindness, which gives the study randomization. If the crew had known if seeding were or were not going to occur, they may have flown differently, or done something else differently than normal. Blinding prevents bias--whether purposeful or accidental.
+
+## 3-5
+I would respond that larger values happen in normal populations, escpecially when one population is much larger than another. Greater ranges of values will naturally be found in a population of 100,000 than in a population of 1,000.
+
+## 3-8
+No, the researchers did not make a mistake. The dependence that is present is a result of how they found the population. Due to this dependence, two-sample t-tests would be improper to use, but paired t-tools would be fine. 
+
+## 3-18
+A. No. The difference in averages is not resistanct. If a number were to change (say 20 becomes 200), the average would change drastically.
+B. Yes, the avearege of the ranks would be resistant, becuase rank simply shows the median, or at least ranks each value based on which is smallest and which is largest, assigning a 1 to the smallest value, and a 2 to the next smallest value.
+
+## 3-26
+A.
+```{r echo = FALSE}
+data26 <- (case0302)
+vietnam <- filter(data26, Veteran == "Vietnam")
+other <- filter(data26, Veteran == "Other")
+lnvietnam <- log(vietnam$Dioxin + 0.5)
+lnother <- log(other$Dioxin + 0.5)
+boxplot(lnvietnam, lnother, main = "Dioxin Levels in Vets (PPT)", xlab = 'Veteran Type', ylab = 'log of Dioxin Levels ', names = c("Vietnam", "Other"), col = 'orange')
+
+
+```
+
+B. As shown in the one sided Two Sample t-test, the **p-value = 0.1908.**
+```{r echo = FALSE}
+t.test(lnvietnam,lnother, var.equal = T, alternative = 'greater')
+```
+
+```{r echo = FALSE}
+lndata26 <- (case0302)
+lndata26$Dioxin <- log(lndata26$Dioxin +0.5) #change values in one column
+pooledsd <- pooled.sd(lndata26) # do this for a one-sided pooled t.test
+SE <- pooledsd * sqrt(1/646 + 1/97)
+degfree <- 741
+tratio <- qt(0.975, df = 741) #ask the egg why we choose .975 here
+halfwidth <- tratio * SE
+lowerlog <- (1.462548-1.419013) - halfwidth
+upperlog <- (1.462548-1.419013) + halfwidth
+lower <- exp(lowerlog)
+upper <- exp(upperlog)
+```
+C. The 95% confidence interval is **(`r lower`, `r upper`)**, while the transformed 95% confidence interval is **C`r lowerlog`, `r upperlog`)**. This was done using the following code.
+
+## 3-28
+
+##3-30

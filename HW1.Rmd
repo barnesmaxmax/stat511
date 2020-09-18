@@ -34,7 +34,7 @@ This study is important given the lack of random selection for the same reasons 
 ## 1-16
 (A)
 ```{r echo=FALSE}
-boxplot(ex0116$PerCapitaGDP, ylab = 'Gross Domestic Product per Capita in $U.S')
+
 ```
 (B) My display generates and empty box plot for "Rank" and "Country" unless I tell it not to, while Display 1.11 in the book does not. Otherwise, they look fairly similar otherwise.
 (C) The bin width is 20,000.
